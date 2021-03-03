@@ -11,7 +11,7 @@ namespace ConsoleApp2
         {
             string opcaoUsuario = ObterOpcaoUsuario();
 
-            while (opcaoUsuario != "X")
+            while (opcaoUsuario.ToUpper() != "X")
             {
                 switch (opcaoUsuario)
                 {
@@ -23,8 +23,9 @@ namespace ConsoleApp2
                         break;
 
                     default:
-                        break;
+                        throw new ArgumentOutOfRangeException();
                 }
+                opcaoUsuario = ObterOpcaoUsuario();
             }
 
 
@@ -41,8 +42,28 @@ namespace ConsoleApp2
 
             foreach (int i in Enum.GetValues(typeof(Genero)))
             {
-
+                Console.WriteLine("{0}-{1}", i, Enum.GetName(typeof(Genero), i));
             }
+            Console.WriteLine("Digite o gênero entre as opções acima: ");
+            int entradaGenero = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Digite o titulo da série: ");
+            string entradaTitulo = Console.ReadLine();
+
+            Console.WriteLine("Digite o ano de inicio da série"); ;
+            int entradaAno = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Digite a Descrição da série: ");
+            string entradaDescricao = Console.ReadLine();
+
+            Serie novaSerie = new Serie(id: repositorio.ProximoId(),
+                genero: (Genero)entradaGenero,
+                titulo: entradaTitulo,
+                ano: entradaAno,
+                descricao: entradaDescricao
+                );
+
+            repositorio.Insere(novaSerie);
         }
 
         private static void ListarSerie()
