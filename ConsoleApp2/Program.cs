@@ -21,6 +21,18 @@ namespace ConsoleApp2
                     case "2":
                         InserirSerie();
                         break;
+                    case "3":
+                        AtualizaSerie();
+                            break;
+                    case "4":
+                        ExcluirSerie();
+                        break;
+                    case "5":
+                        VisualizaSerie();
+                        break;
+                    case "C":
+                        Console.Clear();
+                        break;
 
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -34,6 +46,57 @@ namespace ConsoleApp2
             Console.ReadKey();
 
 
+        }
+
+        private static void VisualizaSerie()
+        {
+            Console.WriteLine("Digite o id da série: ");
+            int indiceSerie = int.Parse(Console.ReadLine());
+
+            var serie = repositorio.RetornaPorId(indiceSerie);
+
+            Console.WriteLine(serie);
+            
+        }
+
+        private static void ExcluirSerie()
+        {
+            Console.WriteLine("Digite o id da série: ");
+            int indiceSerie = int.Parse(Console.ReadLine());
+
+            repositorio.Excluir(indiceSerie);
+
+        }
+
+        private static void AtualizaSerie()
+        {
+            Console.WriteLine("Digite o id da série: ");
+            int indiceSerie = int.Parse(Console.ReadLine());
+
+
+            foreach (int i in Enum.GetValues(typeof(Genero)))
+            {
+                Console.WriteLine("{0}-{1}", i, Enum.GetName(typeof(Genero), i));
+            }
+            Console.WriteLine("Digite o gênero entre as opções acima: ");
+            int entradaGenero = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Digite o titulo da série: ");
+            string entradaTitulo = Console.ReadLine();
+
+            Console.WriteLine("Digite o ano de inicio da série"); ;
+            int entradaAno = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Digite a Descrição da série: ");
+            string entradaDescricao = Console.ReadLine();
+            Serie atualizaSerie = new Serie(id: indiceSerie,
+                genero: (Genero)entradaGenero,
+                titulo: entradaTitulo,
+                ano: entradaAno,
+                descricao: entradaDescricao
+                );
+
+            repositorio.Atualiza(indiceSerie, atualizaSerie);
         }
 
         private static void InserirSerie()
@@ -80,7 +143,8 @@ namespace ConsoleApp2
 
             foreach (var serie in lista)
             {
-                Console.WriteLine("#ID {0}: - {1}", serie.retornaId(), serie.retornaTitulo());
+                var excluido = serie.retornaExcluido();
+                Console.WriteLine("#ID {0}: - {1} - {2}", serie.retornaId(), serie.retornaTitulo(),  (excluido ? "Excluido": ""));
             }
         }
         private static string ObterOpcaoUsuario()
@@ -99,6 +163,7 @@ namespace ConsoleApp2
             Console.WriteLine();
 
             string opcaoUsuario = Console.ReadLine().ToUpper();
+
             Console.WriteLine();
             return opcaoUsuario;
         }
